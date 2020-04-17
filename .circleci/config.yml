@@ -20,7 +20,7 @@ jobs:
     environment:
       JEST_JUNIT_OUTPUT_DIR: test-output
     steps:
-      - checkout 
+      - checkout
       - install_deps
       - run:
           name: run tests
@@ -52,6 +52,7 @@ workflows:
   build-and-packge:
     jobs:
       - ci-build
+      - integration-tests
       - pack:
           requires:
             - ci-build
@@ -59,6 +60,6 @@ workflows:
             branches:
               only:
                 - master
-       - sast:
+      - sast:
           requires:
             - integration-tests
