@@ -8,12 +8,6 @@ commands:
             npm install
 
 jobs:
-  integration-tests:
-    docker:
-      - image: circleci/node:lts
-      - image: mongo:4.0
-    enviroment:
-      APP_PORT: 4000
   ci-build:
     docker:
       - image: circleci/node:lts
@@ -36,8 +30,20 @@ jobs:
       - install_deps
       - store_artifacts:
           path: ./
-    enviroment:
+  integration-tests:
+    docker:
+      - image: circleci/node:lts
+      - image: mongo:4.0
+    environment:
       APP_PORT: 4000
+    steps:
+      - checkout
+      - install_deps
+      - run:
+          name: run integration test
+          command: |
+            npm run integration-tests
+
   sast:
     docker:
       - image: circleci/node:lts
@@ -63,3 +69,4 @@ workflows:
       - sast:
           requires:
             - integration-tests
+            
